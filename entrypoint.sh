@@ -9,9 +9,15 @@ fi
 NAMESPACE=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
 
 cd $HOME
-python3 -m http.server --directory $HOME 80 &
+python3 -m http.server --directory $HOME/http-root 80 &
 PID=$!
-certbot certonly --webroot -w $HOME -n --agree-tos --email ${EMAIL} --no-self-upgrade -d ${DOMAINS}
+
+# Uses the LE staging server
+certbot -v --test-cert certonly --webroot -w $HOME/http-root -n --agree-tos --email ${EMAIL} --no-self-upgrade -d ${DOMAINS}
+
+# Uses the LE production server - this is rate limited quickly do not use for testing!
+#certbot certonly --webroot -w $HOME/http-root -n --agree-tos --email ${EMAIL} --no-self-upgrade -d ${DOMAINS}
+
 kill $PID
 
 CERTPATH=/etc/letsencrypt/live/$(echo $DOMAINS | cut -f1 -d',')
