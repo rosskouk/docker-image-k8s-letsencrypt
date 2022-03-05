@@ -1,0 +1,45 @@
+{
+    "apiVersion": "batch/v1",
+    "kind": "CronJob",
+    "metadata": {
+        "name": "TPL_CRON_NAME"
+    },
+    "spec": {
+        "schedule": "0 0 1 * *",
+        "jobTemplate": {
+            "spec": {
+                "template": {
+                    "spec": {
+                        "containers": [
+                            {
+                                "name": "TPL_CRON_CRONTAINER_NAME",
+                                "env": [
+                                    {
+                                        "name": "DOMAINS",
+                                        "value": "TPL_DOMAINS"
+                                    },
+                                    {
+                                        "name": "EMAIL",
+                                        "value": "TPL_EMAIL"
+                                    },
+                                    {
+                                        "name": "SECRET",
+                                        "value": "TPL_SECRET_NAME"
+                                    }
+                                ],
+                                "image": "rosskouk/k8s-letsencrypt:v1",
+                                "ports": [
+                                    {
+                                        "name": "certbot",
+                                        "containerPort": 80
+                                    }
+                                ]
+                            }
+                        ],
+                        "restartPolicy": "OnFailure"
+                    }
+                }
+            }
+        }
+    }
+  }

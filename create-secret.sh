@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ -z $EMAIL || -z $DOMAINS || -z $SECRET ]]; then
-	echo "EMAIL, DOMAINS and SECRET env vars required"
+	echo "EMAIL, DOMAINS and SECRET env vars are required!"
 	env
 	exit 1
 fi
@@ -24,11 +24,11 @@ CERTPATH=/etc/letsencrypt/live/$(echo $DOMAINS | cut -f1 -d',')
 
 ls $CERTPATH || exit 1
 
-cat $HOME/secret-patch-template.json | \
-	sed "s/NAMESPACE/${NAMESPACE}/" | \
-	sed "s/NAME/${SECRET}/" | \
-	sed "s/TLSCERT/$(cat ${CERTPATH}/fullchain.pem | base64 | tr -d '\n')/" | \
-	sed "s/TLSKEY/$(cat ${CERTPATH}/privkey.pem |  base64 | tr -d '\n')/" \
+cat $HOME/tpl-secret.json | \
+	sed "s/TPL_NAMESPACE/${NAMESPACE}/" | \
+	sed "s/TPL_SECRET_NAME/${SECRET}/" | \
+	sed "s/TPL_TLS_CERT/$(cat ${CERTPATH}/fullchain.pem | base64 | tr -d '\n')/" | \
+	sed "s/TPL_TLS_KEY/$(cat ${CERTPATH}/privkey.pem |  base64 | tr -d '\n')/" \
 	> $HOME/secret-patch.json
 
 cat $HOME/secret-patch.json || exit 1
