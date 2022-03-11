@@ -45,7 +45,7 @@ secret_update=$(curl -sk --cacert /var/run/secrets/kubernetes.io/serviceaccount/
 			   )
 
 # Ensure $secret_update is NULL
-if [ -z $secret_update ]
+if [[ -z $secret_update ]]
 then
 	echo "Secret updated"
 	exit 0

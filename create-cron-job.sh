@@ -12,12 +12,12 @@ job_status=$(curl -sk --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.
 		     xargs
 	        )
 
-if [ -z $job_status ]
+if [[ -z $cron_job_status ]]
 then
 	echo "Job already exists, nothing to do"
 	exit 0
 
-elif [ $job_status -eq 404 ]
+elif [[ $cron_job_status -eq 404 ]]
 then
 	if [[ -z $EMAIL || -z $DOMAINS || -z $SECRET ]]
 	then
@@ -48,8 +48,7 @@ then
 		         xargs
 				)
 
-	# Ensure $job_create is NULL
-	if [[ -z $job_create ]]
+	if [[ -z $cron_job_create ]]
 	then
 		echo "Cron job created"
 		exit 0
