@@ -12,7 +12,7 @@
                     "spec": {
                         "containers": [
                             {
-                                "name": "TPL_CRON_CRONTAINER_NAME",
+                                "name": "TPL_CRON_CONTAINER_NAME",
                                 "env": [
                                     {
                                         "name": "DOMAINS",
