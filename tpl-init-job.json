@@ -1,0 +1,47 @@
+{
+    "apiVersion": "batch/v1",
+    "kind": "Job",
+    "metadata": {
+        "name": "TPL_JOB_NAME"
+    },
+    "spec": {
+        "jobTemplate": {
+            "spec": {
+                "template": {
+                    "spec": {
+                        "containers": [
+                            {
+                                "name": "TPL_JOB_CONTAINER_NAME",
+                                "env": [
+                                    {
+                                        "name": "DOMAINS",
+                                        "value": "TPL_DOMAINS"
+                                    },
+                                    {
+                                        "name": "EMAIL",
+                                        "value": "TPL_EMAIL"
+                                    },
+                                    {
+                                        "name": "SECRET",
+                                        "value": "TPL_SECRET_NAME"
+                                    }
+                                ],
+                                "command": [
+                                    "/root/create-secret.sh"
+                                ],
+                                "image": "rosskouk/k8s-letsencrypt:v1",
+                                "ports": [
+                                    {
+                                        "name": "certbot",
+                                        "containerPort": 80
+                                    }
+                                ]
+                            }
+                        ],
+                        "restartPolicy": "OnFailure"
+                    }
+                }
+            }
+        }
+    }
+  }
