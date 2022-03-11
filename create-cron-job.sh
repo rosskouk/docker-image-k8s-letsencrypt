@@ -59,13 +59,54 @@ then
 		exit 1
 	fi
 
+	# Create one time job to generate secret immediately
+
+	# Fill in the init job template
+	cat $HOME/tpl-init-job.json | \
+	sed "s/TPL_JOB_NAME/${SECRET}-init/" | \
+	sed "s/TPL_JOB_CONTAINER_NAME/${SECRET}-certbot-init/" | \
+	sed "s/TPL_DOMAINS/${DOMAINS}/" | \
+	sed "s/TPL_EMAIL/${EMAIL}/" | \
+	sed "s/TPL_SECRET_NAME/${SECRET}/" \
+	> $HOME/init-job-patch.json
+
+	init_job_create=$(curl -sk --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+			               -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
+					       -H "Content-Type: application/json" \
+					       -d @$HOME/init-job-patch.json \
+					       -X POST https://kubernetes/apis/batch/v1/namespaces/${NAMESPACE}/jobs/ | \
+				 	  grep code | \
+		         	  awk -F ':' '{print $2}' | \
+		         	  xargs
+					)
+
+	# Ensure $init_job_create is NULL
+	if [[ -z $init_job_create ]]
+	then
+		echo "Init job created"
+
+	else
+		echo "An error occurred while creating the init job"
+		echo $init_job_create
+		exit 1
+	fi
+
+	# Check init job completed successfully
+	init_job_status=$(curl -vk --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+	                       -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
+		          		   -X GET https://kubernetes/apis/batch/v1/namespaces/${NAMESPACE}/jobs/${SECRET}-init/status | \
+		     		  grep code | \
+		     		  awk -F ':' '{print $2}' | \
+		     		  xargs
+	        		)
+
+
+
+
+
+	# Delete one time job
+
 else
 	echo "An error occurred while checking if the cronjob exists"
 	exit 1
 fi
-
-# Create job from cronjob
-
-# Check completion
-
-# Delete one time job
