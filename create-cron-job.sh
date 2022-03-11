@@ -49,7 +49,7 @@ then
 				)
 
 	# Ensure $job_create is NULL
-	if [ -z $job_create ]
+	if [[ -z $job_create ]]
 	then
 		echo "Cron job created"
 		exit 0
