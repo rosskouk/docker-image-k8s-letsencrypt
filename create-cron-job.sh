@@ -56,6 +56,7 @@ then
 
 	else
 		echo "An error occurred while creating the cron job"
+		echo $job_create
 		exit 1
 	fi
 
