@@ -1,6 +1,7 @@
 #!/bin/bash
 
-if [[ -z $EMAIL || -z $DOMAINS || -z $SECRET ]]; then
+if [[ -z $EMAIL || -z $DOMAINS || -z $SECRET ]]
+then
 	echo "EMAIL, DOMAINS and SECRET env vars are required!"
 	env
 	exit 1
