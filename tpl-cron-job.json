@@ -27,7 +27,9 @@
                                         "value": "TPL_SECRET_NAME"
                                     }
                                 ],
-                                "command": "/root/create-secret.sh",
+                                "command": [
+                                    "/root/create-secret.sh"
+                                ],
                                 "image": "rosskouk/k8s-letsencrypt:v1",
                                 "ports": [
                                     {
