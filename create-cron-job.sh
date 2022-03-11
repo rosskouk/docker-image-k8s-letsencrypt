@@ -19,9 +19,9 @@ then
 
 elif [[ $cron_job_status -eq 404 ]]
 then
-	if [[ -z $EMAIL || -z $DOMAINS || -z $SECRET ]]
+	if [[ -z $EMAIL || -z $DOMAINS || -z $SECRET || -z $SERVICE_FIELD || -z $SERVICE_NAME ]]
 	then
-		echo "EMAIL, DOMAINS and SECRET env vars are required!"
+		echo "EMAIL, DOMAINS, SECRET, SERVICE_FIELD and SERVICE_NAME env vars are required!"
 		env
 		exit 1
 	fi
@@ -63,6 +63,8 @@ then
 
 	# Fill in the init job template
 	cat $HOME/tpl-init-job.json | \
+	sed "s/TPL_SERVICE_FIELD/${SERVICE_FIELD}/" | \
+	sed "s/TPL_SERVICE_NAME/${SERVICE_NAME}/" | \
 	sed "s/TPL_JOB_NAME/${SECRET}-init/" | \
 	sed "s/TPL_JOB_CONTAINER_NAME/${SECRET}-certbot-init/" | \
 	sed "s/TPL_DOMAINS/${DOMAINS}/" | \
