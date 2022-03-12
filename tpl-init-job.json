@@ -12,6 +12,7 @@
         }
       },
       "spec": {
+        "serviceAccountName": "TPL_SERVICE_ACCOUNT",
         "containers": [
           {
             "name": "TPL_JOB_CONTAINER_NAME",
