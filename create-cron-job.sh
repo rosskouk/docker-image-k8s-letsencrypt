@@ -98,13 +98,20 @@ then
         exit 1
     fi
 
-    sleep 30
+    # Wait for init job to complete successfully, bail out after six failures
+    c=0
+    i=0
 
+    while [[ i -ne 1 ]]
+    do
+        if [[ $c -eq 6 ]]
+        then
+            echo "Init job failed!"
+            exit 1
+        fi
 
-    # Wait for init job to complete successfully
-    #i=0
-    #while [[ i -ne 1 ]]
-    #do
+        sleep 30
+
         init_job_status=$(curl -sk --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
                                -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
                                -X GET https://kubernetes/apis/batch/v1/namespaces/${NAMESPACE}/jobs/${SECRET}-init/status | \
@@ -113,15 +120,16 @@ then
                           xargs 
                          )
 
-    if [[ $init_job_status -eq 1 ]]
-    then
-        echo "Init job was successful"
-
-    else
-        echo "Init job failed"
-        echo $init_job_status
-        exit 1
-    fi
+        if [[ $init_job_status -eq 1 ]]
+        then
+            echo "Init job was successful"
+            i=1
+        else
+            echo "Init job retrying"
+            # Increment the counter
+            ((c++))
+        fi
+    done
 
     # Delete the one time init job
     init_job_delete=$(curl -sk --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
