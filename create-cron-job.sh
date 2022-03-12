@@ -101,17 +101,23 @@ then
 	sleep 30
 
 	# Check init job completed successfully
-	init_job_status=$(curl -vk --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+	init_job_status=$(curl -sk --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
 	                       -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
 		          		   -X GET https://kubernetes/apis/batch/v1/namespaces/${NAMESPACE}/jobs/${SECRET}-init/status | \
-		     		  grep code | \
-		     		  awk -F ':' '{print $2}' | \
-		     		  xargs
+					  egrep -E '("succeeded":)' | \
+					  awk -F ':' '{print $2}' | \
+					  xargs 
 	        		)
 
+	if [[ $init_job_status -eq 1 ]]
+	then
+		echo "Init job was successful"
 
-
-
+	else
+		echo "Init job failed"
+		echo $init_job_status
+		exit 1
+	fi
 
 	# Delete one time job
 
