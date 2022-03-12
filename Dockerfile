@@ -1,5 +1,5 @@
 FROM alpine:3.15.0
-LABEL maintainer="Ross Stewart <rosskouk@gmail.com>"
+LABEL maintainer="Ross Stewart - https://github.com/rosskouk/docker-image-k8s-letsencrypt/issues"
 
 RUN apk add certbot curl bash
 RUN mkdir /root/http-root
