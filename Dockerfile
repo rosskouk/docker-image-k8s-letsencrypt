@@ -14,4 +14,5 @@ RUN chmod 755 /root/*.sh
 
 EXPOSE 80
 
-CMD [ "/root/entrypoint.sh" ]
+#CMD [ "/root/create-secret.sh" ]
+#CMD ["tail", "-f", "/dev/null"]
