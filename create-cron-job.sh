@@ -25,8 +25,9 @@ then
 		env
 		exit 1
 	fi
+	echo "Cron job does not exist, preparing...."
 
-	echo "Cron job does not exist, creating...."
+	sleep 30
 
 	# Fill in the cron job template
 	cat $HOME/tpl-cron-job.json | \
@@ -96,6 +97,8 @@ then
 		echo $init_job_create
 		exit 1
 	fi
+
+	sleep 30
 
 	# Check init job completed successfully
 	init_job_status=$(curl -vk --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
