@@ -119,7 +119,11 @@ then
 		exit 1
 	fi
 
-	# Delete one time job
+	# Delete the one time init job
+	init_job_delete=$(curl -sk --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt \
+	                       -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" \
+						   -X DELETE https://kubernetes/apis/batch/v1/namespaces/${NAMESPACE}/jobs/${SECRET}-init?propagationPolicy=Foreground
+					 )
 
 else
 	echo "An error occurred while checking if the cronjob exists"
