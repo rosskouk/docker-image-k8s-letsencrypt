@@ -8,6 +8,7 @@ COPY create-secret.sh /root
 COPY create-cron-job.sh /root
 COPY tpl-secret.json /root
 COPY tpl-cron-job.json /root
+COPY tpl-init-job.json /root
 
 RUN chmod 755 /root/*.sh
 
