@@ -36,7 +36,7 @@
                 "command": [
                   "/root/create-secret.sh"
                 ],
-                "image": "rosskouk/k8s-letsencrypt:v1",
+                "image": "ghcr.io/rosskouk/k8s-letsencrypt:v1",
                 "ports": [
                   {
                     "name": "certbot",
