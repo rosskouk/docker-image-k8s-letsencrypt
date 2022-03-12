@@ -14,10 +14,10 @@ python3 -m http.server --directory $HOME/http-root 80 &
 PID=$!
 
 # Uses the LE staging server
-certbot -v --test-cert certonly --webroot -w $HOME/http-root -n --agree-tos --email ${EMAIL} --no-self-upgrade -d ${DOMAINS}
+#certbot -v --test-cert certonly --webroot -w $HOME/http-root -n --agree-tos --email ${EMAIL} --no-self-upgrade -d ${DOMAINS}
 
 # Uses the LE production server - this is rate limited quickly do not use for testing!
-#certbot certonly --webroot -w $HOME/http-root -n --agree-tos --email ${EMAIL} --no-self-upgrade -d ${DOMAINS}
+certbot certonly --webroot -w $HOME/http-root -n --agree-tos --email ${EMAIL} --no-self-upgrade -d ${DOMAINS}
 
 kill $PID
 
